@@ -1,9 +1,11 @@
-name: Deploy to GitHub Pages
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,13 +20,16 @@ jobs:
       with:
         php-version: '7.4'
 
-    - name: Build project
-      run: |
-        # Add your build commands here
-        echo "Building project..."
+    - name: Install dependencies
+      run: composer install
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Deploy application
+      uses: atymic/deployer-php-action@0.3.1
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        deploy-path: /var/www/html
+        repository: ${{ github.repository }}
+        branch: main
+
+    - name: Run tests
+      run: phpunit
