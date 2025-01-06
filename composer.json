@@ -2,7 +2,7 @@
     "name": "peemima/magic-ai",
     "description": "A completely FREE AI tools website complete with an easy-to-use API.",
     "require": {
-        "php": "^7.4",
+        "php": "^7.4"
     },
     "autoload": {
         "psr-4": {
